@@ -29,6 +29,18 @@ export default class ImageNode extends EditorNodeMixin(Image) {
         node.alphaMode = alphaMode === undefined ? ImageAlphaMode.Blend : alphaMode;
         node.alphaCutoff = alphaCutoff === undefined ? 0.5 : alphaCutoff;
         node.projection = projection;
+
+        //mike
+        const cueableObjectComponent = json.components.find(c => c.name === "cueing-object");
+        if (cueableObjectComponent) {
+          node.cueableObject = cueableObjectComponent.props.cueableObject;
+          node.cueGroupName = cueableObjectComponent.props.cueGroupName;
+          node.role = cueableObjectComponent.props.role;
+          node.reactivationTimeout = cueableObjectComponent.props.reactivationTimeout;
+          node.cueOrder = cueableObjectComponent.props.cueOrder;
+          node.activationTimeout = cueableObjectComponent.props.activationTimeout;
+        }
+        //mikend
       })()
     );
 
@@ -48,6 +60,15 @@ export default class ImageNode extends EditorNodeMixin(Image) {
     this.href = "";
     this.controls = true;
     this.billboard = false;
+
+    //mike
+    this.cueableObject = false;
+    this.cueGroupName = "";
+    this.role = "";
+    this.reactivationTimeout = 0;
+    this.cueOrder = 0;
+    this.activationTimeout = 0;
+    //mikend
   }
 
   get src() {
@@ -128,6 +149,15 @@ export default class ImageNode extends EditorNodeMixin(Image) {
     this._canonicalUrl = source._canonicalUrl;
     this.href = source.href;
 
+    //mike
+    this.cueableObject = source.cueableObject;
+    this.cueGroupName = source.cueGroupName;
+    this.role = source.role;
+    this.reactivationTimeout = source.reactivationTimeout;
+    this.cueOrder = source.cueOrder;
+    this.activationTimeout = source.activationTimeout;
+    //mikend
+
     return this;
   }
 
@@ -149,6 +179,17 @@ export default class ImageNode extends EditorNodeMixin(Image) {
     if (this.href) {
       components.link = { href: this.href };
     }
+
+    //mike
+    components["cueing-object"] = {
+      cueableObject: this.cueableObject,
+      cueGroupName: this.cueGroupName,
+      role: this.role,
+      reactivationTimeout: this.reactivationTimeout,
+      cueOrder: this.cueOrder,
+      activationTimeout: this.activationTimeout
+    };
+    //mikend
 
     return super.serialize(components);
   }
@@ -180,6 +221,18 @@ export default class ImageNode extends EditorNodeMixin(Image) {
     if (this.href && this.projection === "flat") {
       this.addGLTFComponent("link", { href: this.href });
     }
+
+    //mike
+    if (this.cueableObject) {
+      this.addGLTFComponent("cueing-object", {
+        cueGroupName: this.cueGroupName,
+        role: this.role,
+        reactivationTimeout: this.reactivationTimeout,
+        cueOrder: this.cueOrder,
+        activationTimeout: this.activationTimeout
+      });
+    }
+    //mikend
 
     this.replaceObject();
   }

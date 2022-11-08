@@ -26,6 +26,15 @@ export default function ImageNodeEditor(props) {
   const onChangeAlphaCutoff = useSetPropertySelected(editor, "alphaCutoff");
   const onChangeHref = useSetPropertySelected(editor, "href");
 
+  //mike
+  const onChangeCueableObject = useSetPropertySelected(editor, "cueableObject");
+  const onChangeCueGroupName = useSetPropertySelected(editor, "cueGroupName");
+  const onChangeRole = useSetPropertySelected(editor, "role");
+  const onChangeReactivationTimeout = useSetPropertySelected(editor, "reactivationTimeout");
+  const onChangeCueOrder = useSetPropertySelected(editor, "cueOrder");
+  const onChangeActivationTimeout = useSetPropertySelected(editor, "activationTimeout");
+  //mikend
+
   return (
     <NodeEditor description={ImageNodeEditor.description} {...props}>
       <InputGroup name="Image Url">
@@ -71,6 +80,55 @@ export default function ImageNodeEditor(props) {
       <InputGroup name="Projection">
         <SelectInput options={imageProjectionOptions} value={node.projection} onChange={onChangeProjection} />
       </InputGroup>
+      <InputGroup name="Cueing Object" info="Select to create an object for cueing.">
+        <BooleanInput value={node.cueableObject} onChange={onChangeCueableObject} />
+      </InputGroup>
+      {node.cueableObject && (
+        <>
+          <InputGroup name="Cue Name/Group">
+            <StringInput id="cueGroupName" value={node.cueGroupName} onChange={onChangeCueGroupName} />
+          </InputGroup>
+          <InputGroup
+            name="Role"
+            info="Can accept multiple role names. Role names must be separated by a comma and a space: ', '"
+          >
+            <StringInput id="role" value={node.role} onChange={onChangeRole} />
+          </InputGroup>
+          <NumericInputGroup
+            name="Reactivation Timeout"
+            info="Time, in millis, before cue resets. Must be at least 100."
+            min={0}
+            max={1000000000}
+            smallStep={100}
+            mediumStep={1000}
+            largeStep={10000}
+            value={node.reactivationTimeout}
+            onChange={onChangeReactivationTimeout}
+          />
+          <NumericInputGroup
+            name="Cue Order"
+            info="A number, starting a 1, for the order in which the cueing object should be played"
+            min={0}
+            max={1000000000}
+            smallStep={0.1}
+            mediumStep={0.5}
+            largeStep={1}
+            value={node.cueOrder}
+            onChange={onChangeCueOrder}
+          />
+          <NumericInputGroup
+            name="Activation Timeout"
+            info="Time, in millis, before next cue activate. Must be at least 100."
+            min={0}
+            max={1000000000}
+            smallStep={100}
+            mediumStep={1000}
+            largeStep={10000}
+            value={node.activationTimeout}
+            onChange={onChangeActivationTimeout}
+          />
+        </>
+      )}
       <AttributionNodeEditor name="Attribution" {...props} />
     </NodeEditor>
   );
