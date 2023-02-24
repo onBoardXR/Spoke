@@ -9,6 +9,11 @@ import { Cube } from "styled-icons/fa-solid/Cube";
 import { GLTFInfo } from "../inputs/GLTFInfo";
 import AttributionNodeEditor from "./AttributionNodeEditor";
 
+//onboardxr
+import NumericInputGroup from "../inputs/NumericInputGroup";
+import StringInput from "../inputs/StringInput";
+//onboardxrend
+
 export default class ModelNodeEditor extends Component {
   static propTypes = {
     editor: PropTypes.object,
@@ -51,6 +56,36 @@ export default class ModelNodeEditor extends Component {
   onChangeBillboard = billboard => {
     this.props.editor.setPropertySelected("billboard", billboard);
   };
+  //onboardxr
+
+  onChangeProxScale = proxScale => {
+    this.props.editor.setPropertySelected("proxScale", proxScale);
+  };
+
+  onChangeEnterRad = enterRad => {
+    this.props.editor.setPropertySelected("enterRad", enterRad);
+  };
+
+  onChangeExitRad = exitRad => {
+    this.props.editor.setPropertySelected("exitRad", exitRad);
+  };
+
+  onChangeMinScale = minScale => {
+    this.props.editor.setPropertySelected("minScale", minScale);
+  };
+
+  onChangeMaxScale = maxScale => {
+    this.props.editor.setPropertySelected("maxScale", maxScale);
+  };
+
+  onChangeDuration = duration => {
+    this.props.editor.setPropertySelected("duration", duration);
+  };
+
+  onChangeEasing = easing => {
+    this.props.editor.setPropertySelected("easing", easing);
+  };
+  //onboardxrend
 
   isAnimationPropertyDisabled() {
     const { multiEdit, editor, node } = this.props;
@@ -99,6 +134,68 @@ export default class ModelNodeEditor extends Component {
         <InputGroup name="Billboard" info="Model always faces user in Hubs. Does not billboard in Spoke.">
           <BooleanInput value={node.billboard} onChange={this.onChangeBillboard} />
         </InputGroup>
+        {/* onboardxr */}
+        <InputGroup name="Enable Proximity Scaling">
+          <BooleanInput value={node.proxScale} onChange={this.onChangeProxScale} />
+        </InputGroup>
+        {node.proxScale && (
+          <>
+            <NumericInputGroup
+              name="Enter Distance"
+              info="The distance at which to move to Ending Scale."
+              min={0.001}
+              smallStep={0.1}
+              mediumStep={1}
+              largeStep={10}
+              value={node.enterRad}
+              onChange={this.onChangeEnterRad}
+            />
+            <NumericInputGroup
+              name="Exit Distance"
+              info="The distance at which to move back to Starting Scale."
+              min={0.001}
+              smallStep={0.1}
+              mediumStep={1}
+              largeStep={10}
+              value={node.exitRad}
+              onChange={this.onChangeExitRad}
+            />
+            <NumericInputGroup
+              name="Starting Scale"
+              info="Object size when out of proximity."
+              min={0.001}
+              smallStep={0.1}
+              mediumStep={1}
+              largeStep={10}
+              value={node.minScale}
+              onChange={this.onChangeMinScale}
+            />
+            <NumericInputGroup
+              name="Ending Scale"
+              info="Object size when within proximity."
+              min={0.001}
+              smallStep={0.1}
+              mediumStep={1}
+              largeStep={10}
+              value={node.maxScale}
+              onChange={this.onChangeMaxScale}
+            />
+            <NumericInputGroup
+              name="Animation Duration"
+              info="Time for animation duration in milliseconds. Minimum is 0."
+              min={0}
+              smallStep={0.1}
+              mediumStep={1}
+              largeStep={10}
+              value={node.duration}
+              onChange={this.onChangeDuration}
+            />
+            <InputGroup name="Animation Easing">
+              <StringInput id="animEasing" value={node.easing} onChange={this.onChangeEasing} />
+            </InputGroup>
+          </>
+        )}
+        {/* onboardxrend */}
         {node.model && <GLTFInfo node={node} />}
         <AttributionNodeEditor name="Attribution" {...this.props} />
       </NodeEditor>

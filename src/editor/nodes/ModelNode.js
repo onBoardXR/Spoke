@@ -79,6 +79,19 @@ export default class ModelNode extends EditorNodeMixin(Model) {
         if (json.components.find(c => c.name === "billboard")) {
           node.billboard = true;
         }
+
+        //onboardxr
+        const proxScaleComponent = json.components.find(c => c.name === "proxtrig-scale");
+        if (proxScaleComponent) {
+          node.proxScale = proxScaleComponent.props.proxScale;
+          node.enterRad = proxScaleComponent.props.enterRad;
+          node.exitRad = proxScaleComponent.props.exitRad;
+          node.minScale = proxScaleComponent.props.minScale;
+          node.maxScale = proxScaleComponent.props.maxScale;
+          node.duration = proxScaleComponent.props.duration;
+          node.easing = proxScaleComponent.props.easing;
+        }
+        //onboardxrend
       })()
     );
 
@@ -98,6 +111,15 @@ export default class ModelNode extends EditorNodeMixin(Model) {
     this.stats = defaultStats;
     this.gltfJson = null;
     this._billboard = false;
+    //onboardxr
+    this.proxScale = false;
+    this.enterRad = 5;
+    this.enterRad = 5.5;
+    this.minScale = 0.001;
+    this.maxScale = 1;
+    this.duration = 1000;
+    this.easing = "easeInOutSine";
+    //onboardxrend
   }
 
   // Overrides Model's src property and stores the original (non-resolved) url.
@@ -374,6 +396,20 @@ export default class ModelNode extends EditorNodeMixin(Model) {
       components.billboard = {};
     }
 
+    //onboardxr
+    if (this.proxScale) {
+      components["proxtrig-scale"] = {
+        proxScale: this.proxScale,
+        enterRad: this.enterRad,
+        exitRad: this.exitRad,
+        minScale: this.minScale,
+        maxScale: this.maxScale,
+        duration: this.duration,
+        easing: this.easing
+      };
+    }
+    //onboardxrend
+
     return super.serialize(components);
   }
 
@@ -394,6 +430,16 @@ export default class ModelNode extends EditorNodeMixin(Model) {
     this.walkable = source.walkable;
     this.combine = source.combine;
     this._billboard = source._billboard;
+
+    //onboardxr
+    this.proxScale = source.proxScale;
+    this.enterRad = source.enterRad;
+    this.exitRad = source.exitRad;
+    this.minScale = source.minScale;
+    this.maxScale = source.maxScale;
+    this.duration = source.duration;
+    this.easing = source.easing;
+    //onboardxrend
 
     this.updateStaticModes();
 
@@ -429,5 +475,18 @@ export default class ModelNode extends EditorNodeMixin(Model) {
     if (this.billboard) {
       this.addGLTFComponent("billboard", {});
     }
+
+    //onboardxr
+    if (this.proxScale) {
+      this.addGLTFComponent("proxtrig-scale", {
+        enterRad: this.enterRad,
+        exitRad: this.exitRad,
+        minScale: this.minScale,
+        maxScale: this.maxScale,
+        duration: this.duration,
+        easing: this.easing
+      });
+    }
+    //onboardxrend
   }
 }

@@ -23,6 +23,17 @@ export default class AudioNode extends AudioParamsNode(AudioSource) {
     const audioComp = json.components.find(c => c.name === "audio");
     const { src, controls, autoPlay, loop } = audioComp.props;
 
+    //onboardxr
+    const proxPlayComp = json.components.find(c => c.name === "proxtrig-audio");
+    if (proxPlayComp) {
+      node.proxPlay = proxPlayComp.props.proxPlay;
+      node.playDist = proxPlayComp.props.playDist;
+      node.pauseDist = proxPlayComp.props.pauseDist;
+      node.minDist = proxPlayComp.props.minDist;
+      node.shouldReset = proxPlayComp.props.shouldReset;
+    }
+    //onboardxr-end
+
     loadAsync(
       (async () => {
         await node.load(src, onError);
@@ -41,6 +52,13 @@ export default class AudioNode extends AudioParamsNode(AudioSource) {
     this._canonicalUrl = "";
     this._autoPlay = true;
     this.controls = true;
+    //onboardxr
+    this.proxPlay = false;
+    this.playDist = 3;
+    this.pauseDist = 4;
+    this.minDist = 1;
+    this.shouldReset = false;
+    //onboardxrend
 
     const geometry = new PlaneBufferGeometry();
     const material = new MeshBasicMaterial();
@@ -146,20 +164,36 @@ export default class AudioNode extends AudioParamsNode(AudioSource) {
 
     this._canonicalUrl = source._canonicalUrl;
     this.controls = source.controls;
+    //onboardxr
+    this.proxPlay = source.proxPlay;
+    this.pauseDist = source.pauseDist;
+    this.playDist = source.playDist;
+    this.minDist = source.minDist;
+    this.shouldReset = source.shouldReset;
+    //onboardxrend
 
     return this;
   }
 
   serialize() {
+    //onboardxr
     return super.serialize({
       audio: {
         src: this._canonicalUrl,
         controls: this.controls,
         autoPlay: this.autoPlay,
         loop: this.loop
+      },
+      "proxtrig-audio": {
+        proxPlay: this.proxPlay,
+        playDist: this.playDist,
+        pauseDist: this.pauseDist,
+        minDist: this.minDist,
+        shouldReset: this.shouldReset
       }
     });
   }
+  //onboardxrend
 
   prepareForExport() {
     super.prepareForExport();

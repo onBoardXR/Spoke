@@ -51,7 +51,7 @@ export default class App extends Component {
 
   componentDidMount() {
     this.props.api.addListener("authentication-changed", this.onAuthenticationChanged);
-    console.log("TESTING DEPLOY FOR ONBOARDXR");
+    //console.log("TESTING DEPLOY FOR ONBOARDXR");
   }
 
   onAuthenticationChanged = isAuthenticated => {
