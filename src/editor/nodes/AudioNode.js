@@ -29,7 +29,6 @@ export default class AudioNode extends AudioParamsNode(AudioSource) {
       node.proxPlay = proxPlayComp.props.proxPlay;
       node.playDist = proxPlayComp.props.playDist;
       node.pauseDist = proxPlayComp.props.pauseDist;
-      node.minDist = proxPlayComp.props.minDist;
       node.shouldReset = proxPlayComp.props.shouldReset;
     }
     //onboardxr-end
@@ -56,7 +55,6 @@ export default class AudioNode extends AudioParamsNode(AudioSource) {
     this.proxPlay = false;
     this.playDist = 3;
     this.pauseDist = 4;
-    this.minDist = 1;
     this.shouldReset = false;
     //onboardxrend
 
@@ -168,7 +166,6 @@ export default class AudioNode extends AudioParamsNode(AudioSource) {
     this.proxPlay = source.proxPlay;
     this.pauseDist = source.pauseDist;
     this.playDist = source.playDist;
-    this.minDist = source.minDist;
     this.shouldReset = source.shouldReset;
     //onboardxrend
 
@@ -188,7 +185,6 @@ export default class AudioNode extends AudioParamsNode(AudioSource) {
         proxPlay: this.proxPlay,
         playDist: this.playDist,
         pauseDist: this.pauseDist,
-        minDist: this.minDist,
         shouldReset: this.shouldReset
       }
     });
@@ -208,5 +204,14 @@ export default class AudioNode extends AudioParamsNode(AudioSource) {
       id: this.uuid
     });
     this.replaceObject();
+    //onboardxr
+    if (this.proxPlay) {
+      this.addGLTFComponent("proxtrig-audio", {
+        playDist: this.playDist,
+        pauseDist: this.pauseDist,
+        shouldReset: this.shouldReset
+      });
+    }
+    //onboardxrend
   }
 }

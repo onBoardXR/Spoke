@@ -22,7 +22,6 @@ export default function AudioNodeEditor(props) {
   const onChangeProxPlay = useSetPropertySelected(editor, "proxPlay");
   const onChangePlayDist = useSetPropertySelected(editor, "playDist");
   const onChangePauseDist = useSetPropertySelected(editor, "pauseDist");
-  const onChangeMinDist = useSetPropertySelected(editor, "minDist");
   const onChangeShouldReset = useSetPropertySelected(editor, "shouldReset");
   //onboardxrend
 
@@ -46,16 +45,6 @@ export default function AudioNodeEditor(props) {
       </InputGroup>
       {node.proxPlay && (
         <>
-          <NumericInputGroup
-            name="Minimum Distance"
-            info="The radius at closest a user can be before audio pauses."
-            min={0.001}
-            smallStep={0.1}
-            mediumStep={1}
-            largeStep={10}
-            value={node.minDist}
-            onChange={onChangeMinDist}
-          />
           <NumericInputGroup
             name="Play Threshold"
             info="The radius at which the audio will play."
